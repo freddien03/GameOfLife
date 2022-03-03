@@ -1,7 +1,6 @@
 import random
 import time
 from tkinter import Tk, Canvas
-global resolution
 resolution = 500
 
 def create2DArray(n):
@@ -13,25 +12,20 @@ def create2DArray(n):
   return grid
 
 def countLiveNeighbours(grid1, i, j):
-  x = 3
-  y = 3
-  z = 0
-  zz = 0
-  if i == len(grid1)-1:
-    x = 2
-  if j == len(grid1)-1:
-    y = 2
-  if i == 0:
-    x = 2
-    z = 1
-  if j == 0:
-    y = 2
-    zz = 1
   count = 0
-  for ii in range(x):
-    for jj in range(y):
-      if ii != 1-z or jj != 1-zz:
-        count += grid1[i-1+ii+z][j-1+jj+zz]
+  for xOffset in range(-1, 2):
+    for yOffset in range(-1, 2):
+      x = i+xOffset
+      y = j+yOffset
+      if x < 0:
+        x = len(grid1)-1
+      elif x >= len(grid1):
+        x = 0
+      if y < 0:
+        y = len(grid1)-1
+      elif y >= len(grid1):
+        y = 0
+      count += grid1[x][y]
   return count
 
 def checkToDeath(grid3, i, j):
@@ -94,6 +88,7 @@ def runSimulation(grid8):
   while True:
     displayGraphic(grid8, len(grid8))
     grid8 = createNewGen(grid8)
+    time.sleep(0.1)
 
 def displayBoard(grid7):
   for i in range(len(grid7)):
@@ -123,8 +118,8 @@ def setup():
   master.title('Game of Life')
   w = Canvas(master, width=resolution, height=resolution)
   w.pack()
-  mainGrid = createRandBoard(25)
-##  mainGrid = createCustomBoard(25)
+  # mainGrid = createRandBoard(25)
+  mainGrid = createCustomBoard(25)
   runSimulation(mainGrid)
 
 setup()
